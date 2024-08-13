@@ -1,10 +1,10 @@
 "use client"
-import { signup } from '@/actions/auth-actions';
+import { auth, signup } from '@/actions/auth-actions';
 import Link from 'next/link';
 import { useFormState } from "react-dom"
-export default function AuthForm() {
+export default function AuthForm({ mode }) {
 
-  const [formState, formAction] = useFormState(signup, {})
+  const [formState, formAction] = useFormState(auth.bind(null, mode), {})
 
   return (
     <form id="auth-form" action={formAction}>
@@ -35,12 +35,17 @@ export default function AuthForm() {
           )
         }
         <button type="submit">
-          Create Account
+          {
+            mode == "login" ? 'login' :
+              '  Create Account'
+          }
         </button>
       </p>
       <p>
-        <Link href="/">Login with existing account.</Link>
+        {mode == 'login' && <Link href="/?mode=signup">Create An Account</Link>}
+        {mode == 'signup' && <Link href="/?mode=login">Login with existing account.</Link>}
+        {/* <Link href="/?mode=login">Login with existing account.</Link> */}
       </p>
-    </form>
+    </form >
   );
 }
